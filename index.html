@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2232%22 fill=%22%230c0c0d%22/%3E%3Ctext x=%2232%22 y=%2240%22 font-family=%22Arial%22 font-size=%2224%22 font-weight=%22600%22 fill=%22white%22 text-anchor=%22middle%22%3EAA%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="Ayman Azer · Senior Product Designer">
+<meta property="og:description" content="Design systems, mobile and web product design. Tampa, Florida.">
+<style>
+html{-webkit-text-size-adjust:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+</style>
+<title>Ayman Azer</title>
+<meta name="description" content="Ayman Azer, Senior Product Designer in Tampa, Florida. Design systems, mobile and web product design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: floating pill nav over a white canvas; soft grey component cards on a 12-col grid, max 1180px. */
+:root{
+  --bg:#ffffff;
+  --surface:#f2f2f0;
+  --surface-2:#e8e8e5;
+  --fg:#0c0c0d;
+  --muted:#66666c;
+  --line:#e3e3df;
+  --accent:#0d8bff;      /* the blue of a selection handle */
+  --on-accent:#ffffff;
+  --stage:#f0f0ee;       /* matches the light ground of captured mockups */
+  --pill-bg:rgba(255,255,255,.78);
+  --shadow:0 1px 2px rgba(12,12,13,.05),0 10px 30px -12px rgba(12,12,13,.18);
+  --ok:#0f8a4b;
+  --font:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r-card:22px;
+  --tint-amt:13%;        /* how much of each project's hue tints its stage */
+  --glow:55%;
+  --ease:cubic-bezier(.22,.9,.24,1);
+  --spring:cubic-bezier(.34,1.4,.5,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b0b0c;--surface:#161618;--surface-2:#202023;--fg:#f3f3f1;--muted:#9c9ca4;--line:#26262a;
+  --accent:#3aa7ff;--on-accent:#06121f;--pill-bg:rgba(22,22,24,.78);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -12px rgba(0,0,0,.7);--ok:#3fcf86;--tint-amt:24%;--glow:6%;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b0b0c;--surface:#161618;--surface-2:#202023;--fg:#f3f3f1;--muted:#9c9ca4;--line:#26262a;
+  --accent:#3aa7ff;--on-accent:#06121f;--pill-bg:rgba(22,22,24,.78);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -12px rgba(0,0,0,.7);--ok:#3fcf86;--tint-amt:24%;--glow:6%;color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1180px;margin:0 auto}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-weight:500;text-wrap:balance;margin:0}
+h1{font-size:clamp(40px,6.6vw,76px);line-height:1.02;letter-spacing:-.035em}
+h2{font-size:clamp(28px,3.8vw,44px);line-height:1.08;letter-spacing:-.03em}
+h3{font-size:20px;line-height:1.25;letter-spacing:-.015em}
+p{margin:0}
+.lead{font-size:clamp(17px,1.6vw,19px);color:var(--muted);max-width:60ch;line-height:1.55}
+
+/* ---------- Nav ---------- */
+.nav{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);left:0;right:0;z-index:50;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:10px;pointer-events:none;view-transition-name:nav}
+.pill{pointer-events:auto;background:var(--pill-bg);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);
+  border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow);display:flex;align-items:center;gap:2px;padding:5px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;padding:4px 12px 4px 5px;font-family:var(--mono);font-size:14px;font-weight:500;letter-spacing:-.01em}
+.logo .mark{width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:11px;font-weight:500;letter-spacing:0}
+.links{position:relative}
+.links a{position:relative;z-index:1;text-decoration:none;font-size:14px;padding:7px 14px;border-radius:999px;color:var(--muted);transition:color .25s}
+.links a[aria-current="page"]{color:var(--fg)}
+.links .ind{position:absolute;z-index:0;top:5px;bottom:5px;left:0;width:0;border-radius:999px;background:var(--surface-2);transition:transform .45s var(--spring),width .45s var(--spring)}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;color:var(--fg);text-decoration:none;transition:background .2s}
+.icon-btn:hover{background:var(--surface-2)}
+.icon-btn svg{width:17px;height:17px}
+/* sun / moon switch */
+.mode{position:relative;display:flex;align-items:center;gap:0;height:36px;padding:3px;border:0;border-radius:999px;background:var(--surface-2);cursor:pointer;margin-left:2px}
+.mode span{position:relative;z-index:1;width:30px;height:30px;display:grid;place-items:center;color:var(--muted);transition:color .3s}
+.mode svg{width:16px;height:16px}
+.mode::before{content:"";position:absolute;top:3px;left:3px;width:30px;height:30px;border-radius:50%;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.18);transition:transform .5s var(--spring)}
+.mode[aria-checked="true"]::before{transform:translateX(30px)}
+.mode[aria-checked="false"] .sun,.mode[aria-checked="true"] .moon{color:var(--fg)}
+.mode[aria-checked="false"] .sun svg{animation:spin .6s var(--ease)}
+@keyframes spin{from{transform:rotate(-90deg) scale(.6)}}
+@media (max-width:640px){
+  .logo .name{display:none}.logo{padding:4px 5px}
+  .links a.hide-sm{display:none}
+  .links a{padding:7px 11px}
+  .pill.actions .li{display:none}
+}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:500;
+  text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .35s var(--spring),background .2s,border-color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn.primary{background:var(--fg);color:var(--bg)}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--fg)}
+.btn.ghost:hover{border-color:var(--muted)}
+.btn svg{width:16px;height:16px;transition:transform .35s var(--spring)}
+.btn:hover svg{transform:translateX(3px)}
+
+/* ---------- Page shell ---------- */
+main{padding-top:calc(env(safe-area-inset-top,0px) + 110px);padding-bottom:40px}
+section{padding-block:clamp(48px,7vw,96px)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.sec-head .mono{display:block;margin-bottom:10px}
+
+/* load-in: starts visible, sharpens into place */
+.rise{animation:rise .9s var(--ease) both}
+@keyframes rise{from{transform:translateY(14px);filter:blur(6px)}to{transform:none;filter:none}}
+.d1{animation-delay:.06s}.d2{animation-delay:.14s}.d3{animation-delay:.22s}.d4{animation-delay:.3s}.d5{animation-delay:.38s}
+/* scroll reveal: transform only, never hidden */
+.rv{transition:transform .9s var(--ease)}
+.rv.pre{transform:translateY(22px)}
+
+/* ---------- Hero ---------- */
+.hero{padding-top:clamp(12px,3vw,40px);padding-bottom:clamp(32px,5vw,56px)}
+.hero .mono{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent);animation:pulse 2.4s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.hero h1{max-width:16ch}
+.hero .lead{margin-top:22px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+/* home hero: centered statement, each line shades from muted to ink, words rise in */
+.hero.center{text-align:center;display:flex;flex-direction:column;align-items:center;padding-top:clamp(24px,6vw,80px);padding-bottom:clamp(40px,6vw,72px)}
+.hero.center .lead{margin-inline:auto;text-align:center}
+.hero.center .cta{justify-content:center}
+.statement{font-size:clamp(38px,6.2vw,82px);line-height:1.02;letter-spacing:-.05em;font-weight:500;max-width:none}
+.hero h1.statement{max-width:none}
+.statement .ln{display:block}
+.statement .w{display:inline-block;color:color-mix(in srgb,var(--fg) var(--k),var(--muted));animation:rise 1s var(--ease) both;animation-delay:calc(var(--i) * 55ms + 80ms)}
+/* scroll-shaded paragraph: words go from muted to ink as it scrolls past */
+.shade .w{color:var(--muted);transition:color .5s ease}
+.shade .w.on{color:var(--fg)}
+.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px 48px}
+@media (max-width:820px){.intro{grid-template-columns:1fr}}
+.intro p{font-size:clamp(20px,2.3vw,28px);line-height:1.4;letter-spacing:-.015em;max-width:34ch}
+
+/* showcase cards (live components) */
+.show{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border-radius:var(--r-card);position:relative;overflow:hidden;min-width:0}
+.show .card{aspect-ratio:1/0.92;max-width:100%;display:flex;flex-direction:column}
+.card .cap{position:absolute;left:18px;bottom:16px;right:18px;display:flex;justify-content:space-between;gap:8px}
+.card .cap span:last-child{color:var(--fg);text-transform:none;letter-spacing:0;font-family:var(--font);font-size:13px}
+@media (max-width:900px){.show{grid-template-columns:1fr 1fr}.show .card:last-child{grid-column:1/-1;aspect-ratio:auto;min-height:220px}}
+@media (max-width:600px){.show{grid-template-columns:1fr}.show .card{aspect-ratio:auto;min-height:280px}}
+
+/* card A: selection box over components */
+.sel-stage{flex:1;display:grid;place-items:center;padding:24px 24px 52px}
+.stack{position:relative;display:grid;gap:12px;width:min(230px,100%)}
+.ds-btn{height:44px;border-radius:999px;display:grid;place-items:center;font-size:14px;font-weight:500;border:0}
+.ds-btn.b1{background:#0b7a55;color:#fff}
+.ds-btn.b2{background:#075e41;color:#fff}
+.ds-btn.b3{background:var(--surface-2);color:var(--muted)}
+.selbox{position:absolute;left:-6px;right:-6px;top:-6px;height:56px;border:1.5px solid var(--accent);border-radius:6px;pointer-events:none;transition:transform .7s var(--spring)}
+.selbox i{position:absolute;width:7px;height:7px;background:var(--bg);border:1.5px solid var(--accent);border-radius:1px}
+.selbox i:nth-child(1){left:-4px;top:-4px}.selbox i:nth-child(2){right:-4px;top:-4px}.selbox i:nth-child(3){left:-4px;bottom:-4px}.selbox i:nth-child(4){right:-4px;bottom:-4px}
+.selbox b{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);font:500 10.5px/1 var(--mono);background:var(--accent);color:var(--on-accent);padding:4px 6px;border-radius:4px;white-space:nowrap}
+.selbox em{position:absolute;left:-1px;top:-21px;font:500 10.5px/1 var(--mono);font-style:normal;color:var(--accent);white-space:nowrap}
+
+/* card B: contrast checker */
+.contrast{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:24px 22px 56px}
+.sample{border-radius:16px;padding:18px;display:flex;justify-content:space-between;align-items:end;transition:background .5s var(--ease),color .5s var(--ease)}
+.sample strong{font-size:34px;font-weight:500;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.sample small{font-family:var(--mono);font-size:11px;opacity:.85}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font:500 11px/1 var(--mono);padding:6px 8px;border-radius:999px;border:1px solid var(--line);background:var(--bg);display:inline-flex;gap:5px;align-items:center}
+.badge.pass{color:var(--ok)}.badge.fail{color:var(--muted);text-decoration:line-through}
+.swatches{display:flex;gap:8px}
+.sw{width:28px;height:28px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line);cursor:pointer;transition:transform .3s var(--spring)}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--fg);transform:scale(1.08)}
+
+/* card C: marquee of teams */
+.marq{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:24px 0 56px;overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.track{display:flex;gap:8px;width:max-content;animation:scroll 34s linear infinite}
+.track.rev{animation-direction:reverse;animation-duration:40s}
+.chip{white-space:nowrap;font-size:14px;padding:9px 14px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* ---------- Project cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(40px,5vw,64px) 24px}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.pcard{text-decoration:none;display:flex;flex-direction:column;gap:16px;min-width:0}
+.pcard .cover{aspect-ratio:5/4}
+.pcard .meta{display:flex;justify-content:space-between;align-items:start;gap:16px}
+.pcard h3{font-size:18px;margin-bottom:2px}
+.pcard p{color:var(--muted);font-size:14.5px;line-height:1.45}
+.pcard .tags{justify-content:flex-end;flex:none;max-width:48%;margin:0}
+@media (max-width:520px){.pcard .meta{flex-direction:column;gap:10px}.pcard .tags{justify-content:flex-start;max-width:none}}
+.arrow{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .45s var(--spring),background .25s,color .25s,border-color .25s}
+.arrow svg{width:15px;height:15px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{font:500 10.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:6px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;white-space:nowrap}
+
+/* covers: every project sits on its own tinted stage, the work floats on top */
+.cover{--t:#888;background:color-mix(in srgb,var(--t) var(--tint-amt),var(--bg));border-radius:var(--r-card);overflow:hidden;position:relative;max-width:100%;isolation:isolate;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--t) 14%,transparent)}
+.cover::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 50% 0%,color-mix(in srgb,#fff var(--glow),transparent),transparent 60%)}
+.cover .lift{position:absolute;transition:transform .9s var(--ease)}
+.win{left:9%;right:9%;top:11%;bottom:-6%;border-radius:12px 12px 0 0;overflow:hidden;background:var(--bg);
+  box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 30px 60px -24px rgba(10,14,30,.45),0 0 0 1px rgba(10,14,30,.08)}
+.win .bar{height:26px;display:flex;align-items:center;gap:6px;padding:0 12px;background:var(--surface);border-bottom:1px solid var(--line)}
+.win .bar i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.win img{width:100%;height:calc(100% - 26px);object-fit:cover;object-position:var(--pos,left top)}
+.cardshot{left:8%;right:8%;top:9%;bottom:9%;border-radius:14px;overflow:hidden;box-shadow:0 30px 60px -26px rgba(10,14,30,.5),0 0 0 1px rgba(10,14,30,.06)}
+.cardshot img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,center)}
+.phones{inset:0;display:flex;align-items:center;justify-content:center;gap:4%;padding:9% 6% 0}
+.phones .ph{flex:0 0 28%;height:auto;align-self:flex-start}
+.phones .ph:nth-child(2){margin-top:5%}
+.pair{inset:0;display:flex;align-items:flex-start;justify-content:center;gap:5%;padding:7% 6% 0}
+.pair img{height:108%;width:auto;border-radius:16px;box-shadow:0 26px 50px -24px rgba(0,0,0,.45)}
+.pair img:nth-child(2){margin-top:6%}
+.cover .go{position:absolute;right:16px;bottom:16px;z-index:2;width:40px;height:40px;border-radius:50%;background:var(--bg);color:var(--fg);display:grid;place-items:center;
+  box-shadow:0 6px 20px -8px rgba(0,0,0,.35);transition:transform .45s var(--spring)}
+.cover .go svg{width:16px;height:16px;transform:rotate(-45deg)}
+.pcard:hover .lift{transform:translateY(-8px)}
+.pcard:hover .win{transform:translateY(-8px) scale(1.01)}
+.pcard:hover .go{transform:scale(1.12) rotate(45deg)}
+.ph{aspect-ratio:9/19.5;background:#0c0c0d;border-radius:clamp(14px,2.4vw,30px);padding:clamp(4px,.5vw,7px);box-shadow:0 18px 40px -18px rgba(0,0,0,.45)}
+.ph img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:clamp(10px,1.9vw,24px)}
+
+/* ---------- Approach / quotes ---------- */
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.feature{background:var(--surface);border-radius:var(--r-card);padding:26px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.feature .ico{width:40px;height:40px;border-radius:12px;background:var(--bg);display:grid;place-items:center;margin-bottom:8px;border:1px solid var(--line)}
+.feature .ico svg{width:19px;height:19px}
+.feature p{color:var(--muted);font-size:15px}
+.quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:820px){.quotes{grid-template-columns:1fr}}
+blockquote{margin:0;background:var(--surface);border-radius:var(--r-card);padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+blockquote p{font-size:19px;line-height:1.45;letter-spacing:-.01em}
+blockquote footer{display:flex;gap:12px;align-items:center}
+.ava{width:40px;height:40px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font:500 13px/1 var(--mono);flex:none}
+blockquote footer small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+
+/* ---------- CTA band + footer ---------- */
+.band{background:var(--fg);color:var(--bg);border-radius:28px;padding:clamp(32px,6vw,64px);display:flex;justify-content:space-between;align-items:end;gap:28px;flex-wrap:wrap;overflow:hidden;position:relative}
+.band h2{max-width:14ch}
+.band .btn.primary{background:var(--bg);color:var(--fg)}
+.band .btn.ghost{color:var(--bg);border-color:color-mix(in srgb,var(--bg) 30%,transparent)}
+.band .mono{color:color-mix(in srgb,var(--bg) 60%,transparent);display:block;margin-bottom:14px}
+footer.site{border-top:1px solid var(--line);margin-top:40px;padding-block:28px 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+footer.site nav{display:flex;gap:18px;flex-wrap:wrap}
+footer.site a{text-decoration:none}footer.site a:hover{color:var(--fg)}
+
+/* ---------- Work page filter ---------- */
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fchip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer;color:var(--muted);transition:background .2s,color .2s,border-color .2s}
+.fchip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.pcard.gone{display:none}
+
+/* ---------- Project page ---------- */
+.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--muted);font-size:14px;margin-bottom:28px}
+.back:hover{color:var(--fg)}.back svg{width:15px;height:15px}
+.phead{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:40px;align-items:end;margin-bottom:36px}
+@media (max-width:860px){.phead{grid-template-columns:1fr;gap:24px}}
+.phead .mono{display:block;margin-bottom:16px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;padding-top:4px}
+.facts div{border-top:1px solid var(--line);padding-top:10px;min-width:0}
+.facts dt{font:500 11px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:4px 0 0;font-size:15px}
+.phero{aspect-ratio:16/9}
+@media (max-width:600px){.phero{aspect-ratio:4/3}}
+.body{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px 48px;margin-top:clamp(40px,6vw,72px)}
+@media (max-width:860px){.body{grid-template-columns:1fr}}
+.body > .mono{padding-top:6px}
+.body .txt{max-width:66ch;display:flex;flex-direction:column;gap:16px;font-size:17px}
+.body .txt p{color:var(--fg)}
+.body ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.body li{display:flex;gap:12px;align-items:baseline}
+.body li::before{content:"";flex:none;width:6px;height:6px;border-radius:2px;background:var(--accent);transform:translateY(-3px)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat{background:var(--surface);border-radius:16px;padding:16px}
+.stat strong{display:block;font-size:30px;font-weight:500;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:clamp(40px,6vw,72px)}
+.gallery .g{background:var(--stage);border-radius:var(--r-card);overflow:hidden;margin:0;min-width:0}
+.gallery .g.wide{grid-column:1/-1}
+.gallery .g img{width:100%;height:auto}
+.gallery .g.tall{display:grid;place-items:center;padding:28px;background:var(--surface)}
+.gallery .g.tall img{max-height:560px;width:auto;border-radius:22px;box-shadow:0 18px 40px -20px rgba(0,0,0,.4)}
+.gallery figcaption{font-size:13px;color:var(--muted);padding:10px 4px 0;background:var(--bg)}
+@media (max-width:700px){.gallery{grid-template-columns:1fr}}
+.next{margin-top:clamp(56px,8vw,96px);border-top:1px solid var(--line);padding-top:28px}
+.next a{display:flex;justify-content:space-between;align-items:center;gap:20px;text-decoration:none}
+.next h2{transition:transform .5s var(--spring)}
+.next a:hover h2{transform:translateX(8px)}
+
+/* ---------- Demos ---------- */
+.demo{margin-top:clamp(40px,6vw,72px);background:var(--surface);border-radius:28px;padding:clamp(20px,4vw,40px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:32px;align-items:center}
+@media (max-width:860px){.demo{grid-template-columns:1fr}}
+.demo .dhead .mono{display:inline-flex;gap:8px;align-items:center;margin-bottom:12px}
+.demo .dhead p{color:var(--muted);margin-top:10px;font-size:15px}
+.steps{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:6px}
+.steps button{width:100%;text-align:left;background:transparent;border:0;border-radius:14px;padding:12px 14px;cursor:pointer;display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:center;color:var(--muted);transition:background .25s,color .25s}
+.steps button[aria-current="true"]{background:var(--bg);color:var(--fg);box-shadow:var(--shadow)}
+.steps .n{font:500 12px/1 var(--mono);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line)}
+.steps button[aria-current="true"] .n{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.steps .bar{grid-column:2;height:2px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:6px}
+.steps .bar i{display:block;height:100%;width:0;background:var(--fg)}
+.steps button[aria-current="true"] .bar i{animation:fill var(--dur,3.6s) linear forwards}
+.paused .steps button[aria-current="true"] .bar i{animation-play-state:paused}
+@keyframes fill{to{width:100%}}
+.dstage{display:grid;place-items:center;min-height:420px;position:relative}
+.device{position:relative;cursor:pointer;border:0;padding:0;background:none}
+.device.phone{width:min(280px,72vw);aspect-ratio:9/19.5;background:#0c0c0d;border-radius:42px;padding:9px;box-shadow:0 30px 60px -28px rgba(0,0,0,.55)}
+.device.phone .scr{border-radius:34px}
+.device.bare{width:min(300px,76vw);aspect-ratio:var(--ar,0.5)}
+.device.tv{width:100%;max-width:560px;aspect-ratio:16/9;background:#0c0c0d;border-radius:14px;padding:8px;box-shadow:0 30px 60px -28px rgba(0,0,0,.55)}
+.device.tv::after{content:"";position:absolute;left:38%;right:38%;bottom:-16px;height:8px;border-radius:0 0 8px 8px;background:#2a2a2d}
+.device.tv .scr{border-radius:8px}
+.scr{position:relative;width:100%;height:100%;overflow:hidden;background:#111}
+.device.bare .scr{background:transparent;border-radius:18px}
+.scr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transform:translateX(8%) scale(.98);transition:opacity .55s var(--ease),transform .7s var(--ease)}
+.device.bare .scr img{object-fit:contain}
+.scr img.on{opacity:1;transform:none}
+.scr img.out{opacity:0;transform:translateX(-8%) scale(.98)}
+.tap{position:absolute;right:-8px;top:18%;font:500 11px/1 var(--mono);background:var(--fg);color:var(--bg);padding:7px 9px;border-radius:999px;pointer-events:none}
+
+/* token playground */
+.tp-ctrls{display:grid;gap:16px;margin-top:22px}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer;color:var(--muted);transition:background .25s,color .25s}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.ctrl > span{font-size:14px}
+.tp{--b:#0b7a55;--b2:#075e41;--rad:999px;--pad:12px;--gap:12px;--tb:#ffffff;--tf:#151517;--tm:#6a6a70;--tl:#e3e3df;--ts:#f2f2f0;
+  background:var(--tb);color:var(--tf);border-radius:20px;padding:24px;display:grid;gap:var(--gap);border:1px solid var(--tl);transition:background .4s,color .4s,gap .4s var(--spring)}
+.tp.dark{--tb:#141416;--tf:#f2f2f0;--tm:#9c9ca4;--tl:#2a2a2e;--ts:#1e1e21}
+.tp *{transition:border-radius .45s var(--spring),padding .4s var(--spring),background .4s,color .4s,border-color .4s}
+.tp .lbl{font:500 11px/1 var(--mono);color:var(--tm);letter-spacing:.05em;text-transform:uppercase}
+.tp .in{border:1px solid var(--tl);background:var(--ts);border-radius:min(var(--rad),12px);padding:var(--pad) 14px;font-size:14px;color:var(--tm)}
+.tp .b{border:0;border-radius:var(--rad);padding:var(--pad) 18px;font-size:14px;font-weight:500;cursor:pointer}
+.tp .b.p{background:var(--b);color:#fff}
+.tp .b.s{background:transparent;color:var(--b);box-shadow:inset 0 0 0 1.5px var(--b)}
+.tp.dark .b.s{color:#fff;box-shadow:inset 0 0 0 1.5px #ffffff55}
+.tp .b.d{background:var(--ts);color:var(--tm);cursor:not-allowed}
+.tp .row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.tp .tog{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.tp .sw2{width:42px;height:24px;border-radius:999px;background:var(--b);position:relative;border:0;cursor:pointer}
+.tp .sw2::after{content:"";position:absolute;top:3px;left:21px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .4s var(--spring)}
+.tp .sw2[aria-checked="false"]{background:var(--tl)}
+.tp .sw2[aria-checked="false"]::after{left:3px}
+.tokens{margin-top:14px;font:12px/1.7 var(--mono);color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;overflow-x:auto;white-space:nowrap}
+.tokens b{color:var(--fg);font-weight:500}
+.tokens .sq{display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:middle;margin:0 4px 2px}
+
+/* funnel */
+.funnel{display:grid;gap:14px;width:100%}
+.fr{display:grid;gap:6px}
+.fr .top{display:flex;justify-content:space-between;font-size:14px}
+.fr .top strong{font-variant-numeric:tabular-nums;font-weight:500}
+.fr .trk{height:38px;border-radius:10px;background:var(--bg);overflow:hidden;border:1px solid var(--line)}
+.fr .fill{height:100%;border-radius:9px;background:var(--fg);width:0;transition:width 1.4s var(--ease)}
+.fr:nth-child(2) .fill{background:color-mix(in srgb,var(--fg) 70%,var(--surface))}
+.fr:nth-child(3) .fill{background:var(--accent)}
+.fnote{font-size:13px;color:var(--muted)}
+
+/* ---------- About ---------- */
+.about-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:48px;align-items:start}
+@media (max-width:860px){.about-top{grid-template-columns:1fr;gap:28px}}
+.about-top .txt{display:grid;gap:16px;font-size:18px;max-width:62ch}
+.idcard{background:var(--surface);border-radius:var(--r-card);padding:24px;display:grid;gap:14px}
+.idcard .r{display:flex;justify-content:space-between;gap:16px;font-size:15px;border-top:1px solid var(--line);padding-top:12px}
+.idcard .r:first-child{border-top:0;padding-top:0}
+.idcard .r span:first-child{color:var(--muted)}
+.idcard .r span:last-child{text-align:right}
+.tl{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.tl li{display:grid;grid-template-columns:170px minmax(0,1fr) auto;gap:8px 24px;padding:18px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.tl .when{font:500 13px/1.4 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.tl .what strong{font-weight:500;font-size:17px}
+.tl .what p{color:var(--muted);font-size:15px;margin-top:4px;max-width:62ch}
+.tl .type{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:6px 8px;border-radius:999px;background:var(--surface)}
+.tl .type.blank{background:transparent}
+@media (max-width:700px){.tl li{grid-template-columns:1fr}.tl .type{justify-self:start}.tl .type.blank{display:none}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font-size:14px;padding:8px 13px;border-radius:999px;background:var(--surface)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
+@media (max-width:860px){.two{grid-template-columns:1fr;gap:40px}}
+.certs{width:100%;border-collapse:collapse;font-size:15px}
+.certs td{padding:12px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.certs td:last-child{text-align:right;color:var(--muted);font:13px/1.6 var(--mono);white-space:nowrap;padding-left:12px}
+.certs small{display:block;color:var(--muted);font-size:13px}
+
+/* ---------- Contact ---------- */
+.contact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+.ccard.wide{grid-column:1/-1;background:var(--fg);color:var(--bg)}
+.ccard.wide .mono{color:color-mix(in srgb,var(--bg) 60%,transparent)}
+.ccard .v.big{font-size:clamp(24px,4.4vw,48px);letter-spacing:-.035em;font-weight:500}
+.small-btn.primary{background:var(--bg);color:var(--fg);border-color:transparent}
+.ccard.wide .small-btn:not(.primary){background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 30%,transparent)}
+.band-mail{margin-top:14px;font-size:18px;color:color-mix(in srgb,var(--bg) 70%,transparent);user-select:all}
+@media (max-width:820px){.contact-grid{grid-template-columns:1fr}}
+.ccard{background:var(--surface);border-radius:var(--r-card);padding:24px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ccard .v{font-size:22px;letter-spacing:-.02em;user-select:all;word-break:break-word}
+.ccard .act{margin-top:auto;padding-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.small-btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-size:14px;cursor:pointer;text-decoration:none;transition:transform .35s var(--spring)}
+.small-btn:hover{transform:translateY(-2px)}
+.small-btn svg{width:14px;height:14px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translate(-50%,calc(100% + 40px));opacity:0;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;z-index:70;transition:transform .5s var(--spring),opacity .3s}
+.toast:empty{display:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:80;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 56px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(16px,env(safe-area-inset-left,0px));opacity:0;transition:opacity .3s}
+.lb.in{opacity:1}
+.lb figure{margin:0;max-width:min(1500px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px;transform:scale(.97);transition:transform .45s var(--spring)}
+.lb.in figure{transform:none}
+.lb img{max-height:calc(100vh - 140px);width:auto;max-width:100%;margin:0 auto;border-radius:12px;box-shadow:var(--shadow);background:#fff}
+.lb p{text-align:center;color:var(--muted);font-size:14px}
+.lb button{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:max(14px,env(safe-area-inset-right,0px));width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-size:15px}
+
+/* view transitions */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,.9,.24,1)}
+::view-transition-old(root){animation-name:vt-out}
+::view-transition-new(root){animation-name:vt-in}
+@keyframes vt-out{to{opacity:0;transform:translateY(-10px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(14px)}}
+::view-transition-group(hero-cover){animation-duration:.6s;animation-timing-function:cubic-bezier(.22,.9,.24,1)}
+::view-transition-group(*){animation-duration:.5s;animation-timing-function:cubic-bezier(.22,.9,.24,1)}
+.vt-theme::view-transition-old(root){animation:vt-fade-out .4s ease both}
+.vt-theme::view-transition-new(root){animation:vt-fade-in .4s ease both}
+@keyframes vt-fade-out{to{opacity:0}}
+@keyframes vt-fade-in{from{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .rv.pre{transform:none}
+}
+</style>
+</head>
+<body>
+
+
+<nav class="nav" aria-label="Main">
+  <div class="pill"><a class="logo" href="#home" aria-label="Ayman Azer, home"><span class="mark">AA</span><span class="name">aymanazer</span></a></div>
+  <div class="pill links" id="links">
+    <span class="ind" aria-hidden="true"></span>
+    <a href="#home" data-r="home" class="hide-sm">Home</a>
+    <a href="#work" data-r="work">Work</a>
+    <a href="#about" data-r="about">About</a>
+    <a href="#contact" data-r="contact">Contact</a>
+  </div>
+  <div class="pill actions">
+    <a class="icon-btn li" href="https://www.linkedin.com/in/aymanazer" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4v11H3v-11Zm6.5 0h3.8v1.6h.06c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.77 2.5 4.77 5.75v5.6h-4v-4.97c0-1.18-.02-2.7-1.7-2.7-1.7 0-1.96 1.28-1.96 2.6v5.07h-4v-11Z"/></svg>
+    </a>
+    <button class="mode" id="themeBtn" role="switch" aria-checked="false" aria-label="Dark mode">
+      <span class="sun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg></span>
+      <span class="moon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></span>
+    </button>
+  </div>
+</nav>
+
+<main id="app" class="wrap"></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="lb" id="lb" hidden><figure><img alt=""><p></p></figure><button type="button" aria-label="Close image">✕</button></div>
+
+<script>
+(()=>{
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const I = {
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+  ext:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>',
+  grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><circle cx="17" cy="17" r="3.5"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>',
+  code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>',
+};
+const img = n => 'img/'+n+'.jpg';
+const EMAIL = 'ayman.azer78@gmail.com';
+
+/* ---------------- Content ---------------- */
+const P = [
+ {slug:'design-system', title:'Citizens Design System', client:'Citizens', year:'2023 – Present', platform:'Web, iOS, Android', role:'Senior Product Designer, design system lead',
+  cat:['systems'], tags:['Design system','Figma','Accessibility'],
+  short:'A scalable Figma system shared across teams and platforms.',
+  tint:'#1f8a5c',cover:{type:'win',src:'ds-components',pos:'left top'},
+  summary:'I led the move from Sketch to Figma and built a design system that multiple product teams now use, from tokens and variables to documented components.',
+  sections:[
+   ['Problem','Teams were designing in Sketch with no shared source of truth. Components drifted between products, handoff was slow, and accessibility was checked late, if at all.'],
+   ['What I did',['Led the team transition from Sketch to Figma','Built foundation components first (icons, text styles, spacing), then composite components such as buttons, form fields and cards','Set up raw and semantic variables so the system can support dark mode and brand themes','Wrote documentation and onboarding for designers and developers','Kept every component and pattern to accessibility standards','Set up governance: the system team owns updates, designers submit requests, bi-weekly reviews decide new components']],
+   ['How it works','Raw variables hold base values like a hex color or a 16px size. Semantic variables point at them and are named by purpose, such as color-bg-primary or spacing-content. Products use only the semantic names, so a theme can change without touching a single screen.'],
+  ],
+  demo:'tokens',
+  gallery:[['ds-components','Component architecture: foundations first, then composites with variants for every state.','wide'],['ds-variables','Semantic and raw variables mapped in Figma and in the code panel.','wide']]},
+
+ {slug:'spark-driver', title:'Spark Driver: order chaining', client:'Walmart', year:'2020 – 2021 (contract)', platform:'iOS, Android', role:'Senior Product Designer',
+  cat:['mobile'], tags:['Mobile','Logistics','Prototyping'],
+  short:'Letting drivers chain orders across stores in a single trip.',
+  tint:'#2f6ff0',cover:{type:'phones',srcs:['spark-offers','spark-home','spark-pickup']},
+  summary:'Spark Driver lets drivers deliver Walmart orders. I designed chaining, which lets one trip carry orders from more than one store, and worked on the refer-and-earn program.',
+  sections:[
+   ['Problem','Drivers could not chain scheduled and unscheduled orders across two stores (Walmart and DaaS) or across different pickup points in the same store. Trips felt disjointed and operations lost efficiency.'],
+   ['Requirements',['Chain scheduled and unscheduled orders across any two stores and access points in the same store','Then extend to dynamic chaining: scheduled, unscheduled, Express and OnDemand orders across any number of stores']],
+   ['What I did',['Designed the chaining flows using the Walmart design system and patterns','Worked with researchers to bring driver feedback into each iteration','Designed new components the features needed','Maintained the end-to-end Figma prototype for leaders, engineers and executives','Proposed a UI audit comparing Figma with production for the Driver and Shopper apps']],
+  ],
+  demo:{type:'proto',frame:'phone',screens:[['spark-home','Go online with Spark Now'],['spark-offers','Review chained multi-pickup offers'],['spark-pickup','Follow pickup notes in store'],['spark-delivered','Confirm delivery and rate the trip']]},
+  gallery:[]},
+
+ {slug:'citi-insight', title:'Citi Insight', client:'Citi', year:'2019 – 2021', platform:'Web, mobile (BYOD)', role:'Senior Technical Consultant, UI/UX',
+  cat:['web','systems'], tags:['Enterprise','Fintech','Design system'],
+  short:'Making a global reporting portal fast enough for federal deadlines.',
+  tint:'#0b5cad',cover:{type:'win',src:'citi-components',pos:'center 30%'},
+  summary:'Insight links reporting, analytics and systems across Finance, Risk, Assessments and Compliance. I redesigned its calendar and report pages under an accelerated schedule.',
+  sections:[
+   ['Problem','Operations teams missed filing deadlines and submitted reports with errors, which cost Citi annual federal penalties. The 2011 portal had complex navigation and wide tables that forced horizontal scrolling. A 2017 update did not fix it.'],
+   ['What I did',['Restructured the calendar and report pages around real workflows','Modernized the visual design','Mentored junior product designers','Extended the design system: palette, spacing, iconography and components']],
+   ['Research and testing','We interviewed and observed the people who use Insight, ran a competitive review of navigation patterns, and tested a new sidebar. In testing, users moved through their workflow without questions and asked for a second navigation level and badges for items that need action.'],
+  ],
+  demo:null,
+  gallery:[['citi-components','Calendar components, data rows and system states.','wide'],['citi-palette','Color and responsive spacing tokens.',''],['citi-icons','Icon set at 16, 24 and 48 px.',''],['citi-wireframe','Report dashboard wireframe.','wide']]},
+
+ {slug:'triumph', title:'Triumph payments platform', client:'Triumph Business Capital', year:'8-week engagement', platform:'Web', role:'Product Designer, research and UI',
+  cat:['web'], tags:['Research','Fintech','Dashboard'],
+  short:'Research that turned 282 opportunities into 40 quick wins.',
+  tint:'#c08a2b',cover:{type:'win',src:'triumph-dashboard',pos:'left top'},
+  summary:'Triumph runs a payments network for trucking companies. Back-end work had outpaced design, so they brought us in to add velocity and give customers self-service.',
+  sections:[
+   ['Research','Over eight weeks we interviewed seven client companies (owners, dispatchers, office managers and receivables staff) and six to seven Triumph employees, covering onboarding, ordering, billing and support.'],
+   ['What we heard','Customers felt they could not grow without self-service. They wanted to manage reserves and funding, fix paperwork and short-pays on their own, and stop waiting on their rep for every change.'],
+   ['What I did',['Designed invoice submission and self-service flows','Added error prevention to the submission steps','Redesigned the dashboard around what needs attention today']],
+  ],
+  demo:'funnel',
+  gallery:[['triumph-dashboard','Dashboard: action overview, money, business and invoice aging.','wide'],['triumph-invoices','Invoice list with filters, status and notes.','wide']]},
+
+ {slug:'american-century', title:'Fund product pages', client:'American Century Investments', year:'2021 – 2023', platform:'Web', role:'Senior Product (UX) Designer',
+  cat:['web','systems'], tags:['Fintech','UI revamp','Design system'],
+  short:'Clearer fund pages for investors of every level.',
+  tint:'#0b7a55',cover:{type:'win',src:'aci-desktop',pos:'left top'},
+  summary:'Product pages held dense financial data in competing sections, with a different layout for every fund. I led a UI revamp to make them easier to scan and compare.',
+  sections:[
+   ['Problem','Less experienced investors struggled to find key details, compare options and act. The pages also had to meet regulatory requirements and the brand.'],
+   ['What I did',['Simplified the layout and set one structure for every product page','Brought performance, fees and fund details to the top','Validated the information hierarchy with UX research','Worked with the design system team to reuse components and refine them for accessibility']],
+   ['Also at ACI',['Led the rollout of the refreshed visual identity across web and native apps','Led the design system initiative with configurable Figma components','Simplified the rollover experience']],
+  ],
+  demo:null,
+  gallery:[['aci-desktop','Fund page: key figures first, then tabs for performance, risk, portfolio and trading.','wide']]},
+
+ {slug:'mobile-wallet', title:'Mobile Wallet', client:'Venuetize', year:'2017 – 2018', platform:'iOS, Android', role:'Mobile UI/UX Designer',
+  cat:['mobile'], tags:['Mobile','Payments','Sports venues'],
+  short:'A brandable wallet for stadiums, malls and airports.',
+  tint:'#e5484d',cover:{type:'phones',srcs:['wallet-order-scr','wallet-transactions-scr','wallet-item-scr']},
+  summary:'A wallet module that drops into venue apps, so fans can pay for food, drinks and merchandise from their phone. It shipped in apps for teams such as LAFC.',
+  sections:[
+   ['Audience','Visitors to malls, stadiums and airports, aged 25 to 65.'],
+   ['What I did',['Ran research and a competitive review of existing wallets','Wireframed the wallet and ordering flows','Built interactive prototypes, including a fully animated demo in Principle','Designed the final UI so each venue could apply its own branding']],
+   ['What testing changed','A 41-year-old season pass holder got stuck on the first screen, which had two buttons for adding a card. We merged them into one clear entry point and added card types beyond credit and debit.'],
+  ],
+  demo:{type:'proto',frame:'bare',ar:'0.51',screens:[['wallet-transactions','See cards and recent transactions'],['wallet-order','Order from venue vendors'],['wallet-item','Customize and add to cart']]},
+  gallery:[['wallet-hero','Wallet, card setup and ordering screens.','wide']]},
+
+ {slug:'pll', title:'PLL App', client:'Premier Lacrosse League', year:'', platform:'iOS, Android', role:'Led app design, ideation to production',
+  cat:['mobile'], tags:['Mobile','Sports','Live data'],
+  short:'Scores, stats, fantasy and picks for lacrosse fans.',
+  tint:'#f5c400',cover:{type:'pair',srcs:['pll-stats','pll-picks']},
+  summary:'The PLL App gives fans news, live scores and highlights, plus fantasy lineups, weekly picks and leaderboards. I led the app with the PLL team from ideation through production.',
+  sections:[
+   ['What the app does',['Live game hub with game flow, win probability and leaders','Fantasy teams, leagues and weekly picks','Fan status that earns rewards','Personal settings for favorite teams, players and topics','Tickets and game alerts']],
+   ['Note','Screens shown here are from the live App Store listing. A full case study is still to be written.'],
+  ],
+  demo:{type:'proto',frame:'bare',ar:'0.46',screens:[['pll-stats','Follow live stats and win probability'],['pll-picks','Make weekly picks and predictions']]},
+  gallery:[]},
+
+ {slug:'mlb-network', title:'MLB Network on connected TV', client:'MLB', year:'2020 – 2021 (contract)', platform:'Apple TV, Roku, Fire TV', role:'Senior Product Designer',
+  cat:['tv'], tags:['Connected TV','Streaming','Authentication'],
+  short:'Live MLB Network on the TV, with a clear sign-in path.',
+  tint:'#3a5bd9',cover:{type:'card',src:'mlb-login',pos:'center'},
+  summary:'Subscribers could already watch MLB Network live on web and mobile. The goal was to bring it to connected devices and make TV-provider sign-in painless.',
+  sections:[
+   ['Requirements',['Find MLB Network in the app and start playback','Prompt users who have not signed in with their TV provider, before playback','Show what is on now and next','Give live video controls that match other live streams']],
+   ['What I did','I mapped the authentication flow for every account state (logged in or not, linked to a TV provider or not) and designed each screen for the 10-foot UI. I also defined Ballpark app improvements: home screen, ticket purchase and the in-park experience.'],
+  ],
+  demo:{type:'proto',frame:'tv',screens:[['mlb-get','Users without access learn how to get MLB Network'],['mlb-login','Link a TV provider with a short URL or QR code']]},
+  gallery:[['mlb-flow','Authentication flow across MLB and TV-provider states.','wide']]},
+
+ {slug:'volk', title:'Volk portable eye exam', client:'Volk Optical', year:'2021', platform:'Android app + device', role:'Product Designer',
+  cat:['mobile'], tags:['Health','Hardware','Mobile'],
+  short:'An app for a handheld retinal camera.',
+  tint:'#0aa6d8',cover:{type:'phones',srcs:['volk-home','volk-capture']},
+  summary:'Volk, known for retinal lenses, built a portable imaging device. I researched and designed the app that doctors and technicians use to capture retinal and anterior images and create patient reports.',
+  sections:[
+   ['Problem','Eye exam equipment is heavy, expensive and often rented or financed. It rarely uses smartphone technology or automation.'],
+   ['What I did',['Interviewed doctors and technicians about their exam workflow','Studied how people hold the device with dominant and non-dominant hands','Prioritized features into tiers for a tight deadline','Designed appointments, patient lists and guided capture with an alignment overlay']],
+  ],
+  demo:{type:'proto',frame:'phone',screens:[['volk-home','Start from today’s appointments'],['volk-capture','Align and capture retinal images']]},
+  gallery:[['volk-device','The handheld device.','wide']]},
+
+ {slug:'buccaneers', title:'Buccaneers app sprint', client:'Tampa Bay Buccaneers', year:'', platform:'iOS, Android', role:'UX research and UI',
+  cat:['mobile'], tags:['Design sprint','Sports'],
+  short:'New fan features shaped in a design sprint.',
+  tint:'#d50a0a',cover:{type:'phones',srcs:['bucs-profile','bucs-boxscore']},
+  summary:'A design sprint to add features to the Buccaneers app for fans aged 15 to 75: game stats, box scores and a member profile.',
+  sections:[['What I did',['Researched fan needs','Ran a design sprint with the team','Designed high-fidelity prototypes']]],
+  demo:{type:'proto',frame:'phone',screens:[['bucs-profile','Member profile with wallet, tickets and events'],['bucs-boxscore','Box score with side-by-side team stats']]},
+  gallery:[]},
+
+ {slug:'we-shop', title:'We Shop', client:'Beauty commerce web app', year:'', platform:'Mobile web', role:'UX and UI',
+  cat:['mobile'], tags:['E-commerce','Dashboard'],
+  short:'Storefronts for stylists and makeup artists.',
+  tint:'#14b8a6',cover:{type:'phones',srcs:['weshop-dashboard','weshop-sales']},
+  summary:'A web app that lets hair stylists, makeup artists and estheticians run their own storefront, track goals and share product media on social.',
+  sections:[['What I did',['Researched agent needs','Wireframed the core flows','Designed high-fidelity prototypes']]],
+  demo:{type:'proto',frame:'phone',screens:[['weshop-dashboard','Monthly goals and top sellers'],['weshop-sales','Sales trends and suggested items']]},
+  gallery:[]},
+
+ {slug:'culture-of-fit', title:'Culture of Fit', client:'Corporate wellness', year:'', platform:'Web', role:'UX and UI',
+  cat:['web'], tags:['Wellness','Dashboard'],
+  short:'A member dashboard for on-site fitness programs.',
+  tint:'#6d5bd0',cover:{type:'card',src:'cof-dashboard',pos:'center'},
+  summary:'Culture of Fit runs fitness and meditation classes inside offices. I designed the member dashboard for course progress, attendance and activity.',
+  sections:[['What I did',['Built personas for employees with low to high tech experience','Defined the information architecture','Designed wireframes and high-fidelity screens']]],
+  demo:null,
+  gallery:[['cof-dashboard','Member overview.','wide'],['cof-attendance','Attendance calendar with session details.','wide']]},
+];
+const FEATURED = ['design-system','spark-driver','citi-insight','triumph','american-century','mobile-wallet','pll','mlb-network'];
+const MORE = ['volk','buccaneers','we-shop','culture-of-fit'];
+const bySlug = s => P.find(p=>p.slug===s);
+
+const EXP = [
+ ['Aug 2023 – Now','Citizens','Senior Product Designer','Led the Sketch-to-Figma move and built a design system used across teams and platforms.','Full-time'],
+ ['Feb – Aug 2023','PepsiCo','Senior Product Designer','Product-success and performance dashboards for Walmart vendors, built on Highcharts, for desktop and native mobile.','Contract'],
+ ['Feb 2021 – Aug 2023','American Century Investments','Senior Product (UX) Designer','Design system lead, brand refresh across web and native apps, fund page and rollover redesigns.',''],
+ ['Nov 2020 – Jan 2021','MLB','Senior Product Designer','MLB Network on connected TV and Ballpark app improvements.','Contract'],
+ ['Jul 2020 – Feb 2021','Walmart','Senior Product Designer','Spark Driver: chaining, refer-and-earn, end-to-end prototype and UI audit.','Contract'],
+ ['Jun 2019 – Feb 2021','Citi','Senior Technical Consultant, UI/UX','Insight portal redesign, user research and prototypes in Axure and Sketch.',''],
+ ['Jan – Jun 2019','Tech Data','Enterprise UX Designer','Redesigned vendor checkout, which led to a 30% increase in sales. Updated the global design system.',''],
+ ['Dec 2017 – Dec 2018','Venuetize','Mobile UI/UX Designer','Brandable mobile wallet module, apps for LAFC, Miami Dolphins, Red Bulls and Amalie Arena.',''],
+ ['Jun 2014 – Nov 2017','Ono Hawaiian BBQ','Senior Graphic Designer, UI/UX','Led the design team and brand across all platforms. 2014 Diamond Award.',''],
+ ['2012 – 2017','Freelance, Charisma, Avion','UX/UI and Senior Graphic Designer','Process flows, wireframes and prototypes for web and mobile redesigns.',''],
+];
+const CERTS = [
+ ['The AI-Driven Product Designer','LinkedIn Learning','2025'],
+ ['Introduction to Prompt Engineering for Generative AI','LinkedIn Learning','2025'],
+ ['Learning Webflow','LinkedIn Learning','2025'],
+ ['Principle for UX Design','LinkedIn Learning','2020'],
+ ['Agile Project Management Foundations','LinkedIn Learning','2017'],
+ ['UX Design Techniques: Overview','LinkedIn Learning','2016'],
+ ['Hands-On UX: Mobile Prototyping','Lynda.com','2016'],
+ ['Design a Mobile App with Adobe XD','Lynda.com','2016'],
+];
+const QUOTES = [
+ ['I had the privilege to manage Ayman on a large revamp of the Insight application at Citi. Under a highly accelerated schedule, he understood the ask and delivered high-quality solutions quickly. He is an amazing team player who makes everyone around him better.','Andrew Heard','Managed Ayman at Citi','AH'],
+ ['A brilliant and precise designer, and an inspiring person. Whenever I had a problem, he never left me without a solution. I could always depend on him to set the best example as a designer at American Century Investments.','Cheyenne Toulouse','Worked with Ayman at American Century','CT'],
+];
+
+/* ---------------- Templates ---------------- */
+let wi=0;
+function statement(lines){ let i=0; return lines.map(l=>{const ws=l.split(' '); return `<span class="ln">${ws.map((w,j)=>`<span class="w" style="--i:${i++};--k:${Math.min(100,Math.round(30+j/ws.length*180))}%">${w}</span>`).join(' ')}</span>`}).join(''); }
+function words(t){ return t.split(' ').map(w=>`<span class="w">${w}</span>`).join(' '); }
+function cover(p, cls=''){
+  const c=p.cover; let inner='';
+  if(c.type==='win') inner=`<div class="lift win" style="--pos:${c.pos||'left top'}"><div class="bar"><i></i><i></i><i></i></div><img src="${img(c.src)}" alt="" loading="lazy"></div>`;
+  else if(c.type==='card') inner=`<div class="lift cardshot" style="--pos:${c.pos||'center'}"><img src="${img(c.src)}" alt="" loading="lazy"></div>`;
+  else if(c.type==='phones') inner=`<div class="lift phones">${c.srcs.map(s=>c.bare?`<img class="bareph" src="${img(s)}" alt="" loading="lazy">`:`<div class="ph"><img src="${img(s)}" alt="" loading="lazy"></div>`).join('')}</div>`;
+  else if(c.type==='pair') inner=`<div class="lift pair">${c.srcs.map(s=>`<img src="${img(s)}" alt="" loading="lazy">`).join('')}</div>`;
+  return `<div class="cover ${cls}" style="--t:${p.tint}" data-cover="${p.slug}" role="img" aria-label="${p.title} preview">${inner}${cls?'':`<span class="go" aria-hidden="true">${I.arrow}</span>`}</div>`;
+}
+function pcard(p, i=0){
+  return `<a class="pcard rv" href="#p-${p.slug}" data-slug="${p.slug}" data-cat="${p.cat.join(' ')}">
+    ${cover(p)}
+    <div class="meta"><div><h3>${p.title}</h3><p>${p.client} · ${p.short}</p></div>
+    <div class="tags">${p.tags.slice(0,2).map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+  </a>`;
+}
+function footer(){
+  return `<footer class="site"><span>© 2026 Ayman Azer · Tampa, Florida · <span style="user-select:all">${EMAIL}</span></span>
+  <nav aria-label="Footer"><a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a><a href="https://www.linkedin.com/in/aymanazer" target="_blank" rel="noopener">LinkedIn</a></nav></footer>`;
+}
+function band(){
+  return `<section class="rv"><div class="band"><div><span class="mono">Open to work · On-site, hybrid or remote</span><h2>Need a designer who builds the system, not just the screens?</h2>
+  <p class="band-mail">${EMAIL}</p></div>
+  <div class="cta" style="margin:0"><a class="btn primary" href="#contact">Get in touch ${I.arrow}</a><a class="btn ghost" href="https://www.linkedin.com/in/aymanazer" target="_blank" rel="noopener">LinkedIn</a></div></div></section>`;
+}
+
+function vHome(){
+  const companies=['Citizens','American Century Investments','PepsiCo','Walmart','MLB','Citi','Tech Data','Venuetize'];
+  const apps=['Spark Driver','PLL App','LAFC','Buccaneers','Insight','Mobile Wallet','Triumph','Volk'];
+  const row=(a)=>[...a,...a].map(x=>`<span class="chip">${x}</span>`).join('');
+  return `
+  <section class="hero">
+    <span class="mono rise"><span class="dot"></span>Senior Product Designer · Tampa, FL · Open to work</span>
+    <h1 class="rise d1">I design systems that help teams ship clear, consistent products.</h1>
+    <p class="lead rise d2">More than a decade of product design across fintech, retail, sports and enterprise. Right now I lead design system work at Citizens.</p>
+    <div class="cta rise d3"><a class="btn primary" href="#work">See selected work ${I.arrow}</a><a class="btn ghost" href="#contact">Get in touch</a></div>
+  </section>
+  <div class="show rise d4">
+    <div class="card"><div class="sel-stage"><div class="stack" id="stack">
+      <div class="ds-btn b1">Label</div><div class="ds-btn b2">Label</div><div class="ds-btn b3">Label</div>
+      <div class="selbox" id="selbox"><em id="selname">button/primary</em><i></i><i></i><i></i><i></i><b id="selsize">padding/medium · 12</b></div>
+    </div></div><div class="cap mono"><span>Components</span><span>Variants for every state</span></div></div>
+    <div class="card"><div class="contrast">
+      <div class="sample" id="sample"><div><small id="pair">#FFFFFF on #0B7A55</small></div><strong id="ratio">5.4:1</strong></div>
+      <div class="badges" id="badges"></div>
+      <div class="swatches" role="group" aria-label="Brand color">
+        <button class="sw" style="background:#0b7a55" data-c="#0b7a55" aria-pressed="true" aria-label="Green"></button>
+        <button class="sw" style="background:#0d8bff" data-c="#0d8bff" aria-pressed="false" aria-label="Blue"></button>
+        <button class="sw" style="background:#5b3fd6" data-c="#5b3fd6" aria-pressed="false" aria-label="Violet"></button>
+        <button class="sw" style="background:#e5484d" data-c="#e5484d" aria-pressed="false" aria-label="Red"></button>
+      </div>
+    </div><div class="cap mono"><span>Accessibility</span><span>Live WCAG contrast check</span></div></div>
+    <div class="card"><div class="marq"><div class="track">${row(companies)}</div><div class="track rev">${row(apps)}</div></div>
+      <div class="cap mono"><span>Teams</span><span>Fortune 500s to startups</span></div></div>
+  </div>
+
+  <section>
+    <div class="sec-head rv"><div><span class="mono">Selected work</span><h2>Case studies</h2></div><a class="btn ghost" href="#work">All projects ${I.arrow}</a></div>
+    <div class="grid">${FEATURED.map(bySlug).map(pcard).join('')}</div>
+  </section>
+
+  <section class="intro">
+    <span class="mono rv">About me</span>
+    <div class="rv" style="display:grid;gap:22px">
+      <p class="shade">${words('I started in graphic design, drawing logos, packaging and campaigns. Product design was the natural next step. For more than ten years I have turned complex requirements into calm, usable products for banks, retailers and sports leagues, and built the systems that keep those products consistent as teams grow.')}</p>
+      <a class="btn ghost" href="#about" style="justify-self:start">More about me ${I.arrow}</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head rv"><div><span class="mono">How I work</span><h2>From research to the component library</h2></div></div>
+    <div class="cols">
+      <div class="feature rv"><span class="ico">${I.grid}</span><h3>Systems first</h3><p>I build the foundations, tokens and components that let teams move fast without drifting apart, and I document them so they get used.</p></div>
+      <div class="feature rv"><span class="ico">${I.search}</span><h3>Grounded in users</h3><p>Interviews, usability tests and design sprints decide what gets built. I bring findings back to the team as clear priorities.</p></div>
+      <div class="feature rv"><span class="ico">${I.code}</span><h3>Shipped with engineers</h3><p>I work in Agile teams, join QA, and audit Figma against production so what ships matches what we designed.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head rv"><div><span class="mono">Recommendations</span><h2>What colleagues say</h2></div></div>
+    <div class="quotes">${QUOTES.map(q=>`<blockquote class="rv"><p>“${q[0]}”</p><footer><span class="ava">${q[3]}</span><span>${q[1]}<small>${q[2]}</small></span></footer></blockquote>`).join('')}</div>
+  </section>
+  ${band()}${footer()}`;
+}
+
+function vWork(){
+  const F=[['all','All'],['systems','Design systems'],['mobile','Mobile'],['web','Web'],['tv','Connected TV']];
+  return `<section class="hero" style="padding-bottom:32px">
+    <span class="mono rise">Work · ${P.length} projects</span>
+    <h1 class="rise d1" style="max-width:14ch">Products I’ve designed and shipped</h1>
+    <p class="lead rise d2">Design systems, mobile apps, enterprise tools and connected TV, for banks, retailers and sports leagues.</p>
+  </section>
+  <div class="sec-head rise d3" style="margin-bottom:24px"><div class="filters" role="group" aria-label="Filter projects">${F.map((f,i)=>`<button class="fchip" data-f="${f[0]}" aria-pressed="${i===0}">${f[1]}</button>`).join('')}</div></div>
+  <div class="grid" id="wgrid">${[...FEATURED,...MORE].map(bySlug).map(pcard).join('')}</div>
+  ${band()}${footer()}`;
+}
+
+function vProject(p){
+  const idx=[...FEATURED,...MORE].indexOf(p.slug); const order=[...FEATURED,...MORE];
+  const nx=bySlug(order[(idx+1)%order.length]);
+  const facts=[['Client',p.client],['Role',p.role],['Platform',p.platform]]; if(p.year) facts.push(['When',p.year]);
+  const sec=p.sections.map(([h,c])=>`<div class="body rv"><span class="mono">${h}</span><div class="txt">${Array.isArray(c)?`<ul>${c.map(x=>`<li><span>${x}</span></li>`).join('')}</ul>`:`<p>${c}</p>`}</div></div>`).join('');
+  return `<section style="padding-top:0">
+    <a class="back rise" href="#work">${I.back} All work</a>
+    <div class="phead"><div><span class="mono rise">${p.client}</span><h1 class="rise d1">${p.title}</h1><p class="lead rise d2" style="margin-top:18px">${p.summary}</p></div>
+      <dl class="facts rise d3">${facts.map(f=>`<div><dt>${f[0]}</dt><dd>${f[1]}</dd></div>`).join('')}</dl></div>
+    ${cover(p,'phero rise d2')}
+    ${sec}
+    ${demo(p)}
+    ${p.gallery.length?`<div class="gallery">${p.gallery.map(g=>`<figure class="g ${g[2]} rv"><img src="${img(g[0])}" alt="${g[1]}" loading="lazy"><figcaption>${g[1]}</figcaption></figure>`).join('')}</div>`:''}
+    <div class="next rv"><span class="mono">Next project</span><a href="#p-${nx.slug}" data-slug="${nx.slug}"><h2>${nx.title}</h2><span class="arrow" aria-hidden="true">${I.arrow}</span></a></div>
+  </section>${footer()}`;
+}
+
+function demo(p){
+  const d=p.demo; if(!d) return '';
+  if(d==='tokens') return `<div class="demo rv" id="tpDemo"><div class="dhead"><span class="mono"><span class="dot"></span>Interactive demo</span><h2>Change a token, every component follows</h2>
+    <p>The same components rendered from semantic tokens. Switch the theme, brand, corner radius or density and watch the system update together.</p>
+    <div class="tp-ctrls">
+      <div class="ctrl"><span>Theme</span><div class="seg" data-k="theme"><button aria-pressed="true" data-v="light">Light</button><button aria-pressed="false" data-v="dark">Dark</button></div></div>
+      <div class="ctrl"><span>Brand</span><div class="seg" data-k="brand"><button aria-pressed="true" data-v="green">Green</button><button aria-pressed="false" data-v="blue">Blue</button><button aria-pressed="false" data-v="violet">Violet</button></div></div>
+      <div class="ctrl"><span>Radius</span><div class="seg" data-k="radius"><button aria-pressed="false" data-v="4">Sharp</button><button aria-pressed="false" data-v="12">Soft</button><button aria-pressed="true" data-v="999">Pill</button></div></div>
+      <div class="ctrl"><span>Density</span><div class="seg" data-k="density"><button aria-pressed="false" data-v="compact">Compact</button><button aria-pressed="true" data-v="comfortable">Comfortable</button></div></div>
+    </div></div>
+    <div><div class="tp" id="tp">
+      <span class="lbl">Sign in</span>
+      <div class="in" aria-hidden="true">you@studio.dev</div>
+      <div class="row"><button class="b p" type="button">Continue</button><button class="b s" type="button">Cancel</button></div>
+      <button class="b d" type="button" disabled>Disabled</button>
+      <div class="tog"><span>Email updates</span><button class="sw2" type="button" role="switch" aria-checked="true" aria-label="Email updates"></button></div>
+    </div><div class="tokens" id="tokOut"></div></div></div>`;
+  if(d==='funnel') return `<div class="demo rv" id="funnel"><div class="dhead"><span class="mono"><span class="dot"></span>From research to roadmap</span><h2>282 opportunities, 40 quick wins</h2>
+    <p>Opportunities came from the kickoff workshop, employee and customer interviews, a heuristic review and an internal tech workshop. We grouped them by affinity, then ranked them by field evidence and UX best practice.</p></div>
+    <div class="funnel">
+      <div class="fr"><div class="top"><span>Total opportunities</span><strong data-n="282">0</strong></div><div class="trk"><div class="fill" data-w="100"></div></div></div>
+      <div class="fr"><div class="top"><span>After consolidation</span><strong data-n="160">0</strong></div><div class="trk"><div class="fill" data-w="${(160/282*100).toFixed(1)}"></div></div></div>
+      <div class="fr"><div class="top"><span>Quick wins for the first release</span><strong data-n="40">0</strong></div><div class="trk"><div class="fill" data-w="${(40/282*100).toFixed(1)}"></div></div></div>
+      <span class="fnote">Bars drawn to scale. <button class="small-btn" id="replay" type="button" style="height:30px;margin-left:6px">Replay</button></span>
+    </div></div>`;
+  // prototype
+  const devCls = d.frame==='phone'?'phone':d.frame==='tv'?'tv':'bare';
+  return `<div class="demo rv proto" data-dur="3.6"><div class="dhead"><span class="mono"><span class="dot"></span>Prototype</span><h2>Walk through the flow</h2>
+    <p>Plays on its own. Tap the ${d.frame==='tv'?'screen':'device'} or pick a step to jump.</p>
+    <ol class="steps">${d.screens.map((s,i)=>`<li><button type="button" data-i="${i}" aria-current="${i===0}"><span class="n">${i+1}</span><span>${s[1]}</span><span class="bar"><i></i></span></button></li>`).join('')}</ol></div>
+    <div class="dstage"><button class="device ${devCls}" type="button" aria-label="Next screen" style="${d.ar?`--ar:${d.ar}`:''}"><div class="scr">${d.screens.map((s,i)=>`<img src="${img(s[0])}" alt="${s[1]}" class="${i===0?'on':''}">`).join('')}</div></button></div></div>`;
+}
+
+function vAbout(){
+  const skills=['Design systems','Figma components & variables','Information architecture','Prototyping','User research & testing','Customer journeys','Interaction design','Accessibility','Mobile app design','Design sprints','Art & creative direction','Brand identity','Webflow','Principle','Axure','Highcharts','HTML & CSS','Agile / Scrum'];
+  return `<section class="hero" style="padding-bottom:24px"><span class="mono rise">About</span><h1 class="rise d1" style="max-width:15ch">Trained in graphic design, focused on product.</h1></section>
+  <div class="about-top">
+    <div class="txt rise d2">
+      <p>I’m a Senior Product Designer who designs scalable, user-centered products across fintech, retail, entertainment and enterprise.</p>
+      <p style="color:var(--muted)">I’ve led design system initiatives, run cross-functional design sprints, and worked closely with engineers, researchers and product teams to ship on web, mobile and connected devices. Whether it is refining a referral program, moving a team to Figma, or aligning components across iOS and Android, I aim for designs that are thoughtful, consistent and efficient, and that meet both user and business goals.</p>
+      <p style="color:var(--muted)">My background is in visual communication. That training still shows up in how I handle type, layout and brand inside product work.</p>
+    </div>
+    <div class="idcard rise d3">
+      <div class="r"><span>Based in</span><span>Tampa, Florida</span></div>
+      <div class="r"><span>Working</span><span>On-site, hybrid or remote</span></div>
+      <div class="r"><span>Now</span><span>Citizens</span></div>
+      <div class="r"><span>Education</span><span>BA Applied Arts, Helwan University</span></div>
+      <div class="r"><span>Award</span><span>2014 Diamond Award, Ono Hawaiian BBQ</span></div>
+    </div>
+  </div>
+  <section>
+    <div class="sec-head rv"><div><span class="mono">Experience</span><h2>Where I’ve worked</h2></div><a class="btn ghost" href="https://www.linkedin.com/in/aymanazer" target="_blank" rel="noopener">Full profile ${I.ext}</a></div>
+    <ol class="tl">${EXP.map(e=>`<li class="rv"><span class="when">${e[0]}</span><div class="what"><strong>${e[1]}</strong> <span style="color:var(--muted)">· ${e[2]}</span><p>${e[3]}</p></div><span class="type ${e[4]?'':'blank'}">${e[4]}</span></li>`).join('')}</ol>
+  </section>
+  <section class="two">
+    <div class="rv"><span class="mono" style="display:block;margin-bottom:16px">Skills & tools</span><div class="chips">${skills.map(s=>`<span>${s}</span>`).join('')}</div></div>
+    <div class="rv"><span class="mono" style="display:block;margin-bottom:8px">Certifications</span>
+      <table class="certs"><tbody>${CERTS.map(c=>`<tr><td>${c[0]}<small>${c[1]}</small></td><td>${c[2]}</td></tr>`).join('')}</tbody></table></div>
+  </section>
+  ${band()}${footer()}`;
+}
+
+function vContact(){
+  return `<section class="hero" style="padding-bottom:0"><span class="mono rise"><span class="dot"></span>Available for new roles</span>
+    <h1 class="rise d1" style="max-width:13ch">Let’s talk about your product.</h1>
+    <p class="lead rise d2">I’m open to senior product design and design system roles in Tampa or remote. Email is the best way to reach me.</p>
+    <div class="contact-grid">
+      <div class="ccard wide rise d3"><span class="mono">Email</span><span class="v big" id="email">${EMAIL}</span>
+        <div class="act"><button class="small-btn primary" data-copy="email" type="button">${I.copy} Copy email</button><a class="small-btn" href="mailto:${EMAIL}">Open in mail app ${I.ext}</a></div></div>
+      <div class="ccard rise d3"><span class="mono">Phone</span><span class="v" id="phone">(562) 328-7770</span>
+        <div class="act"><button class="small-btn" data-copy="phone" type="button">${I.copy} Copy number</button></div></div>
+      <div class="ccard rise d4"><span class="mono">LinkedIn</span><span class="v">linkedin.com/in/aymanazer</span>
+        <div class="act"><a class="small-btn" href="https://www.linkedin.com/in/aymanazer" target="_blank" rel="noopener">Open profile ${I.ext}</a></div></div>
+      <div class="ccard rise d5"><span class="mono">Location</span><span class="v">Tampa, Florida</span>
+        <div class="act"><span class="tag">On-site</span><span class="tag">Hybrid</span><span class="tag">Remote</span></div></div>
+    </div></section>
+  <section><div class="quotes">${QUOTES.slice(0,1).map(q=>`<blockquote class="rv" style="grid-column:1/-1"><p>“${q[0]}”</p><footer><span class="ava">${q[3]}</span><span>${q[1]}<small>${q[2]}</small></span></footer></blockquote>`).join('')}</div></section>
+  ${footer()}`;
+}
+
+/* ---------------- Router ---------------- */
+const app=document.getElementById('app');
+let current='home', prevSlug=null, timers=[];
+function parse(){const h=(location.hash||'#home').slice(1);return h||'home'}
+function view(r){
+  if(r.startsWith('p-')){const p=bySlug(r.slice(2)); if(p) return [vProject(p),'work',p];}
+  if(r==='work') return [vWork(),'work'];
+  if(r==='about') return [vAbout(),'about'];
+  if(r==='contact') return [vContact(),'contact'];
+  return [vHome(),'home'];
+}
+function render(){
+  timers.forEach(clearInterval); timers=[];
+  const r=parse(); const [html,nav,p]=view(r);
+  app.innerHTML=html;
+  document.querySelectorAll('#links a').forEach(a=>{if(a.dataset.r===nav)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  moveInd();
+  document.title = p ? p.title+' · Ayman Azer' : 'Ayman Azer';
+  // shared-element naming
+  if(p){const h=app.querySelector('.phero'); if(h) h.style.viewTransitionName='hero-cover';}
+  else if(prevSlug){const c=app.querySelector(`.pcard[data-slug="${prevSlug}"] .cover`); if(c){c.style.viewTransitionName='hero-cover'; c.closest('.pcard').scrollIntoView({block:'center'}); return after();}}
+  window.scrollTo(0,0);
+  after();
+}
+function after(){
+  setupReveal(); setupHome(); setupWork(); setupProtos(); setupTokens(); setupFunnel(); setupContact(); setupShade(); setupLightbox();
+}
+/* words shade in as the paragraph scrolls through the viewport */
+function setupShade(){
+  const els=[...app.querySelectorAll('.shade')]; if(!els.length) return;
+  const tick=()=>els.forEach(el=>{ const ws=el.querySelectorAll('.w'); const r=el.getBoundingClientRect(), vh=innerHeight;
+    const p=reduce?1:Math.min(1,Math.max(0,(vh*0.85-r.top)/(r.height+vh*0.35)));
+    const n=Math.round(p*ws.length); ws.forEach((w,i)=>w.classList.toggle('on',i<n)); });
+  tick(); if(!reduce){ addEventListener('scroll',tick,{passive:true}); const stop=setInterval(()=>{ if(!document.body.contains(els[0])){removeEventListener('scroll',tick);clearInterval(stop)} },1500); }
+}
+/* full-size image viewer for gallery shots */
+function setupLightbox(){
+  app.querySelectorAll('.gallery .g img').forEach(im=>{ im.style.cursor='zoom-in'; im.tabIndex=0; im.setAttribute('role','button');
+    const open=()=>{ const lb=document.getElementById('lb'); lb.querySelector('img').src=im.src; lb.querySelector('img').alt=im.alt; lb.querySelector('p').textContent=im.alt; lb.hidden=false; requestAnimationFrame(()=>lb.classList.add('in')); lb.querySelector('button').focus(); };
+    im.addEventListener('click',open); im.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open()} }); });
+}
+function closeLb(){ const lb=document.getElementById('lb'); lb.classList.remove('in'); setTimeout(()=>lb.hidden=true,300); }
+document.getElementById('lb').addEventListener('click',e=>{ if(e.target.id==='lb'||e.target.closest('button')) closeLb(); });
+addEventListener('keydown',e=>{ if(e.key==='Escape' && !document.getElementById('lb').hidden) closeLb(); });
+function navigate(){
+  const r=parse();
+  const going=r.startsWith('p-')?r.slice(2):null;
+  const clear=()=>document.querySelectorAll('[data-cover]').forEach(e=>{if(!e.classList.contains('phero'))e.style.viewTransitionName=''});
+  if(document.startViewTransition && !reduce){
+    const t=document.startViewTransition(()=>{render(); prevSlug=going||prevSlug;});
+    t.finished.finally(clear);
+  } else { render(); prevSlug=going||prevSlug; }
+  if(!going && !r.startsWith('p-')) setTimeout(()=>{ if(!parse().startsWith('p-')) prevSlug=null; },700);
+}
+// mark the clicked card cover for the morph
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[data-slug]');
+  if(a){ document.querySelectorAll('[data-cover]').forEach(c=>c.style.viewTransitionName=''); const c=a.querySelector('.cover'); const h=app.querySelector('.phero'); if(c){ c.style.viewTransitionName='hero-cover'; } else if(h){ h.style.viewTransitionName='hero-cover'; } }
+});
+addEventListener('hashchange',navigate);
+
+/* nav indicator */
+function moveInd(){
+  const wrap=document.getElementById('links'), ind=wrap.querySelector('.ind'), a=wrap.querySelector('a[aria-current="page"]');
+  if(!a||a.offsetParent===null){ind.style.width='0px';return}
+  ind.style.width=a.offsetWidth+'px'; ind.style.transform=`translateX(${a.offsetLeft}px)`;
+}
+addEventListener('resize',moveInd);
+document.fonts && document.fonts.ready.then(moveInd);
+
+/* reveal: elements below the fold start slightly lower, always visible */
+let io;
+function setupReveal(){
+  if(io) io.disconnect(); if(reduce) return;
+  io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.remove('pre');io.unobserve(en.target)}}),{rootMargin:'0px 0px -8% 0px'});
+  const vh=innerHeight;
+  app.querySelectorAll('.rv').forEach((el,i)=>{ if(el.getBoundingClientRect().top>vh*0.92){ el.classList.add('pre'); el.style.transitionDelay=((i%3)*70)+'ms'; io.observe(el);} });
+}
+
+/* home: selection box + contrast checker */
+function setupHome(){
+  const box=document.getElementById('selbox'); if(!box) return;
+  const btns=[...document.querySelectorAll('#stack .ds-btn')];
+  const names=['button/primary','button/primary-pressed','button/disabled'];
+  const sizes=['padding/medium · 12','padding/medium · 12','state/disabled'];
+  let k=0;
+  const place=()=>{const b=btns[k]; box.style.transform=`translateY(${b.offsetTop}px)`; document.getElementById('selname').textContent=names[k]; document.getElementById('selsize').textContent=sizes[k];};
+  place(); if(!reduce) timers.push(setInterval(()=>{k=(k+1)%3;place()},2200));
+  const sws=[...document.querySelectorAll('.sw')];
+  const setC=c=>{
+    sws.forEach(s=>s.setAttribute('aria-pressed',s.dataset.c===c));
+    const r=contrast('#ffffff',c);
+    const s=document.getElementById('sample'); s.style.background=c; s.style.color='#ffffff';
+    document.getElementById('pair').textContent='#FFFFFF on '+c.toUpperCase();
+    count(document.getElementById('ratio'),r,1,':1');
+    const t=[['AA text',4.5],['AA large',3],['AAA text',7]];
+    document.getElementById('badges').innerHTML=t.map(([n,v])=>`<span class="badge ${r>=v?'pass':'fail'}">${r>=v?'✓':'✕'} ${n}</span>`).join('');
+  };
+  sws.forEach(s=>s.addEventListener('click',()=>setC(s.dataset.c)));
+  setC('#0b7a55');
+  let ci=0; if(!reduce) timers.push(setInterval(()=>{ if(document.querySelector('.contrast:hover')) return; ci=(ci+1)%sws.length; setC(sws[ci].dataset.c)},3400));
+}
+function lum(h){const n=parseInt(h.slice(1),16);return [n>>16,(n>>8)&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0)}
+function contrast(a,b){const A=lum(a),B=lum(b);return (Math.max(A,B)+.05)/(Math.min(A,B)+.05)}
+function count(el,to,dec=0,suf=''){
+  const from=parseFloat(el.dataset.v||0); el.dataset.v=to; const t0=performance.now(), d=reduce?1:700;
+  const step=t=>{const p=Math.min(1,(t-t0)/d), e=1-Math.pow(1-p,3); el.textContent=(from+(to-from)*e).toFixed(dec)+suf; if(p<1) requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+}
+
+/* work filter with animated layout */
+function setupWork(){
+  const g=document.getElementById('wgrid'); if(!g) return;
+  document.querySelectorAll('.fchip').forEach(b=>b.addEventListener('click',()=>{
+    const f=b.dataset.f;
+    const apply=()=>{document.querySelectorAll('.fchip').forEach(x=>x.setAttribute('aria-pressed',x===b));
+      g.querySelectorAll('.pcard').forEach(c=>c.classList.toggle('gone',f!=='all'&&!c.dataset.cat.split(' ').includes(f)))};
+    const cards=[...g.querySelectorAll('.pcard')];
+    if(document.startViewTransition&&!reduce){cards.forEach(c=>c.style.viewTransitionName='c-'+c.dataset.slug);
+      const t=document.startViewTransition(apply); t.finished.finally(()=>cards.forEach(c=>c.style.viewTransitionName=''));}
+    else apply();
+  }));
+}
+
+/* prototypes */
+function setupProtos(){
+  app.querySelectorAll('.proto').forEach(root=>{
+    const imgs=[...root.querySelectorAll('.scr img')], btns=[...root.querySelectorAll('.steps button')], dev=root.querySelector('.device');
+    const dur=parseFloat(root.dataset.dur)*1000; let i=0, t=null;
+    root.style.setProperty('--dur',dur+'ms');
+    const show=n=>{ if(n===i) return; imgs[i].classList.remove('on'); imgs[i].classList.add('out'); const old=imgs[i]; setTimeout(()=>old.classList.remove('out'),700);
+      i=n; imgs[i].classList.add('on'); btns.forEach((b,k)=>b.setAttribute('aria-current',k===i)); restartBar(); };
+    const restartBar=()=>{const bar=btns[i].querySelector('.bar i'); bar.style.animation='none'; void bar.offsetWidth; bar.style.animation='';};
+    const loop=()=>{clearTimeout(t); if(reduce) return; t=setTimeout(()=>{ if(!root.classList.contains('paused')) show((i+1)%imgs.length); loop(); },dur)};
+    btns.forEach((b,k)=>b.addEventListener('click',()=>{show(k);loop()}));
+    dev.addEventListener('click',()=>{show((i+1)%imgs.length);loop()});
+    root.addEventListener('mouseenter',()=>root.classList.add('paused')); root.addEventListener('mouseleave',()=>{root.classList.remove('paused');restartBar();loop()});
+    const vis=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){restartBar();loop()} else clearTimeout(t) }),{threshold:.35});
+    vis.observe(root); timers.push(setInterval(()=>{ if(!document.body.contains(root)){clearTimeout(t);vis.disconnect()} },1500));
+  });
+}
+
+/* token playground */
+const BRANDS={green:['#0b7a55','#075e41','green-600','green-700'],blue:['#0b6bcb','#0855a3','blue-600','blue-700'],violet:['#5b3fd6','#4630ad','violet-600','violet-700']};
+function setupTokens(){
+  const tp=document.getElementById('tp'); if(!tp) return;
+  const st={theme:'light',brand:'green',radius:'999',density:'comfortable'};
+  const apply=()=>{
+    const b=BRANDS[st.brand]; tp.style.setProperty('--b',b[0]); tp.style.setProperty('--b2',b[1]);
+    tp.classList.toggle('dark',st.theme==='dark');
+    tp.style.setProperty('--rad',st.radius+'px');
+    tp.style.setProperty('--pad',st.density==='compact'?'8px':'12px'); tp.style.setProperty('--gap',st.density==='compact'?'8px':'14px');
+    const bg=st.theme==='dark'?'#141416':'#ffffff';
+    document.getElementById('tokOut').innerHTML=
+      `<b>color-bg-primary</b> → ${b[2]} <span class="sq" style="background:${b[0]}"></span>${b[0]}<br>`+
+      `<b>color-bg-surface</b> → ${st.theme==='dark'?'neutral-950':'neutral-0'} <span class="sq" style="background:${bg};box-shadow:0 0 0 1px var(--line)"></span>${bg}<br>`+
+      `<b>radius-button</b> → ${st.radius==='999'?'radius-full':'radius-'+st.radius} · ${st.radius==='999'?'999px':st.radius+'px'}<br>`+
+      `<b>spacing-button-y</b> → ${st.density==='compact'?'space-2 · 8px':'space-3 · 12px'}`;
+  };
+  document.querySelectorAll('#tpDemo .seg').forEach(seg=>seg.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{
+    st[seg.dataset.k]=btn.dataset.v; seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===btn)); apply();
+  })));
+  tp.querySelector('.sw2').addEventListener('click',e=>{const s=e.currentTarget;s.setAttribute('aria-checked',s.getAttribute('aria-checked')!=='true')});
+  apply();
+}
+
+/* funnel */
+function setupFunnel(){
+  const f=document.getElementById('funnel'); if(!f) return;
+  const run=()=>{f.querySelectorAll('.fill').forEach(x=>{x.style.transition='none';x.style.width='0';void x.offsetWidth;x.style.transition='';x.style.width=x.dataset.w+'%'});
+    f.querySelectorAll('[data-n]').forEach(n=>{n.dataset.v=0;count(n,+n.dataset.n)});};
+  const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){run();o.disconnect()}}),{threshold:.4}); o.observe(f);
+  f.querySelector('#replay').addEventListener('click',run);
+}
+
+/* contact copy */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function setupContact(){
+  app.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{
+    const el=document.getElementById(b.dataset.copy); const v=el.textContent.trim(); const what=b.dataset.copy==='email'?'Email':'Number';
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast(what+' selected. Press copy.')};
+    try{navigator.clipboard.writeText(v).then(()=>toast(what+' copied'),sel)}catch(e){sel()}
+  }));
+}
+
+/* theme toggle */
+const tb=document.getElementById('themeBtn');
+const sysDark=()=>matchMedia('(prefers-color-scheme: dark)').matches;
+try{const s=localStorage.getItem('aa-theme'); if(s) document.documentElement.setAttribute('data-theme',s);}catch(e){}
+const curTheme=()=>document.documentElement.getAttribute('data-theme')||(sysDark()?'dark':'light');
+const syncSwitch=()=>tb.setAttribute('aria-checked',curTheme()==='dark');
+syncSwitch(); matchMedia('(prefers-color-scheme: dark)').addEventListener('change',syncSwitch);
+tb.addEventListener('click',()=>{
+  const nx=curTheme()==='dark'?'light':'dark';
+  const go=()=>{document.documentElement.setAttribute('data-theme',nx);syncSwitch()};
+  if(document.startViewTransition&&!reduce){ const R=document.documentElement; R.classList.add('vt-theme'); document.startViewTransition(go).finished.finally(()=>R.classList.remove('vt-theme')); } else go();
+  try{localStorage.setItem('aa-theme',nx)}catch(e){}
+});
+
+render();
+})();
+</script>
+
+</body>
+</html>
