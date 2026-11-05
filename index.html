@@ -16,7 +16,7 @@ body{margin:0}
 <meta name="description" content="Ayman Azer, Senior Product Designer in Tampa, Florida. Design systems, mobile and web product design.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Mako&family=Manrope:wght@500&family=Inter:wght@400;500;700&display=swap">
 <style>
 /* Layout: floating pill nav over a white canvas; soft grey component cards on a 12-col grid, max 1180px. */
 :root{
@@ -416,6 +416,33 @@ footer.site a{text-decoration:none}footer.site a:hover{color:var(--fg)}
 .toast:empty{display:none}
 .toast.show{transform:translate(-50%,0);opacity:1}
 
+/* ---------- Editable case-study deck ---------- */
+.cb-wrap{margin-top:clamp(48px,7vw,88px)}
+.cb-deck{display:grid;gap:clamp(16px,2.4vw,28px)}
+.cb-loading{color:var(--muted);padding:40px 0}
+.cb-s{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:clamp(8px,1.2vw,16px);cursor:zoom-in;
+  box-shadow:0 5px 20px rgba(0,0,0,.1),0 0 3px rgba(0,0,0,.3);content-visibility:auto;contain-intrinsic-size:auto 600px}
+.cb-in{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;transform:scale(var(--s,0.5))}
+.cb-s .cb-g,.cb-s .cb-t{position:absolute;margin:0}
+.cb-s img.cb-g{display:block;max-width:none;object-fit:cover}
+.cb-s svg.cb-g{overflow:visible}
+.cb-t{font-kerning:normal;text-rendering:geometricPrecision}
+.cb-m{font-family:"Mako","Trebuchet MS",sans-serif;font-weight:400}
+.cb-mr{font-family:"Manrope","Helvetica Neue",Arial,sans-serif;font-weight:500}
+.cb-s ul{margin:0;padding:0 0 0 1.5em;list-style:disc}
+.cb-s ul.cb-l2{padding-left:1.5em;list-style:disc}
+.cb-s li::marker{font-size:.9em}
+.cb-tok .cb-tp{position:absolute;margin:0;height:74.5px;border-radius:37.25px;background:#e4ccff;color:#2c2734;display:flex;align-items:center;justify-content:center;
+  font:700 32px/1 "Inter",system-ui,sans-serif;letter-spacing:-.01em;white-space:nowrap}
+.cb-tok .cb-tl{position:absolute;margin:0;transform:translateX(-50%);font:400 18px/1.4 "Inter",system-ui,sans-serif;color:#1f1d22;white-space:nowrap}
+.cb-tok .cb-th{font-size:18px}
+.cb-s:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.slb .cb-holder{width:min(1600px,100%,calc((100vh - 120px) * 16 / 9))}
+.slb .cb-s{cursor:default;content-visibility:visible}
+@media (orientation:portrait) and (max-width:700px){
+  .slb .cb-holder{width:calc(100vh - 140px);max-width:none;transform:rotate(90deg)}
+}
+
 /* lightbox */
 .lb{position:fixed;inset:0;z-index:80;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 56px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 24px) max(16px,env(safe-area-inset-left,0px));opacity:0;transition:opacity .3s}
@@ -470,6 +497,7 @@ footer.site a{text-decoration:none}footer.site a:hover{color:var(--fg)}
 
 <main id="app" class="wrap"></main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="lb slb" id="slb" hidden><div class="cb-holder"></div><button type="button" aria-label="Close slide">✕</button></div>
 <div class="lb" id="lb" hidden><figure><img alt=""><p></p></figure><button type="button" aria-label="Close image">✕</button></div>
 
 <script>
@@ -492,7 +520,7 @@ const P = [
  {slug:'design-system', title:'CB Design System', client:'Citizens', year:'2023 – Present', platform:'Web, iOS, Android', role:'Senior Product Designer, design system lead',
   cat:['systems'], tags:['Design system','Figma','Accessibility'],
   short:'A scalable Figma system shared across teams and platforms.',
-  tint:'#1f8a5c',cover:{type:'win',src:'ds-components',pos:'left top'},
+  tint:'#1f8a5c',cover:{type:'win',src:'cb/s05-type-styles',pos:'left top'},deck:'case-studies/cb-design-system.html',
   summary:'I led the move from Sketch to Figma and built a design system that multiple product teams now use, from tokens and variables to documented components.',
   sections:[
    ['Problem','Teams were designing in Sketch with no shared source of truth. Components drifted between products, handoff was slow, and accessibility was checked late, if at all.'],
@@ -500,7 +528,7 @@ const P = [
    ['How it works','Raw variables hold base values like a hex color or a 16px size. Semantic variables point at them and are named by purpose, such as color-bg-primary or spacing-content. Products use only the semantic names, so a theme can change without touching a single screen.'],
   ],
   demo:'tokens',
-  gallery:[['ds-components','Component architecture: foundations first, then composites with variants for every state.','wide'],['ds-variables','Semantic and raw variables mapped in Figma and in the code panel.','wide']]},
+  gallery:[]},
 
  {slug:'spark-driver', title:'Spark Driver: order chaining', client:'Walmart', year:'2020 – 2021 (contract)', platform:'iOS, Android', role:'Senior Product Designer',
   cat:['mobile'], tags:['Mobile','Logistics','Prototyping'],
@@ -773,6 +801,7 @@ function vProject(p){
     ${cover(p,'phero rise d2')}
     ${sec}
     ${demo(p)}
+    ${p.deck?`<div class="cb-wrap rv"><div class="sec-head" style="margin-bottom:20px"><div><span class="mono">Case study deck · 15 slides</span><h2>The full presentation</h2></div></div><div id="cbdeck" data-src="${p.deck}"><p class="cb-loading">Loading slides…</p></div></div>`:''}
     ${p.gallery.length?`<div class="gallery">${p.gallery.map(g=>`<figure class="g ${g[2]} rv"><img src="${img(g[0])}" alt="${g[1]}" loading="lazy"><figcaption>${g[1]}</figcaption></figure>`).join('')}</div>`:''}
     <div class="next rv"><span class="mono">Next project</span><a href="#p-${nx.slug}" data-slug="${nx.slug}"><h2>${nx.title}</h2><span class="arrow" aria-hidden="true">${I.arrow}</span></a></div>
   </section>${footer()}`;
@@ -883,7 +912,7 @@ function render(){
   after();
 }
 function after(){
-  setupReveal(); setupHome(); setupWork(); setupProtos(); setupTokens(); setupFunnel(); setupContact(); setupShade(); setupLightbox();
+  setupReveal(); setupHome(); setupWork(); setupProtos(); setupTokens(); setupFunnel(); setupContact(); setupShade(); setupLightbox(); setupDeck();
 }
 /* words shade in as the paragraph scrolls through the viewport */
 function setupShade(){
@@ -894,6 +923,26 @@ function setupShade(){
   tick(); if(!reduce){ addEventListener('scroll',tick,{passive:true}); const stop=setInterval(()=>{ if(!document.body.contains(els[0])){removeEventListener('scroll',tick);clearInterval(stop)} },1500); }
 }
 /* full-size image viewer for gallery shots */
+/* editable case-study deck: slides are 1920x1080 HTML, scaled to the column width */
+function setupDeck(){
+  const host=document.getElementById('cbdeck'); if(!host) return;
+  const fit=()=>host.querySelectorAll('.cb-s').forEach(s=>s.style.setProperty('--s',s.clientWidth/1920));
+  fetch(host.dataset.src).then(r=>{ if(!r.ok) throw new Error(r.status); return r.text(); }).then(t=>{
+    if(!document.body.contains(host)) return;
+    host.innerHTML=t; fit();
+    const ro=new ResizeObserver(fit); ro.observe(host);
+    host.querySelectorAll('.cb-s').forEach(s=>{ s.tabIndex=0; s.addEventListener('click',()=>openSlide(s)); s.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); openSlide(s);} }); });
+  }).catch(()=>{ host.innerHTML='<p class="cb-loading">The slides could not load. Refresh the page to try again.</p>'; });
+}
+function openSlide(s){
+  const lb=document.getElementById('slb'); const box=lb.querySelector('.cb-holder');
+  box.innerHTML=''; const c=s.cloneNode(true); c.removeAttribute('id'); c.tabIndex=-1; box.appendChild(c);
+  lb.hidden=false; const fit=()=>c.style.setProperty('--s',c.clientWidth/1920); requestAnimationFrame(()=>{ fit(); lb.classList.add('in'); lb.querySelector('button').focus(); });
+  lb._fit=fit; addEventListener('resize',fit);
+}
+function closeSlide(){ const lb=document.getElementById('slb'); lb.classList.remove('in'); removeEventListener('resize',lb._fit); setTimeout(()=>{lb.hidden=true; lb.querySelector('.cb-holder').innerHTML='';},300); }
+document.getElementById('slb').addEventListener('click',e=>{ if(e.target.id==='slb'||e.target.closest('button')) closeSlide(); });
+addEventListener('keydown',e=>{ if(e.key==='Escape' && !document.getElementById('slb').hidden) closeSlide(); });
 function setupLightbox(){
   app.querySelectorAll('.gallery .g img').forEach(im=>{ im.style.cursor='zoom-in'; im.tabIndex=0; im.setAttribute('role','button');
     const open=()=>{ const lb=document.getElementById('lb'); lb.querySelector('img').src=im.src; lb.querySelector('img').alt=im.alt; lb.querySelector('p').textContent=im.alt; lb.hidden=false; requestAnimationFrame(()=>lb.classList.add('in')); lb.querySelector('button').focus(); };
