@@ -244,6 +244,9 @@ section{padding-block:clamp(48px,7vw,96px)}
 @media (max-width:820px){.quotes{grid-template-columns:1fr}}
 blockquote{margin:0;background:var(--surface);border-radius:var(--r-card);padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
 blockquote p{font-size:19px;line-height:1.45;letter-spacing:-.01em}
+.recs{display:block;columns:3 300px;column-gap:16px}
+.recs blockquote{break-inside:avoid;margin:0 0 16px;justify-content:flex-start}
+.recs blockquote p{font-size:16px;line-height:1.55;letter-spacing:0}
 blockquote footer{display:flex;gap:12px;align-items:center}
 .ava{width:40px;height:40px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font:500 13px/1 var(--mono);flex:none}
 blockquote footer small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
@@ -718,9 +721,18 @@ const CERTS = [
  ['Hands-On UX: Mobile Prototyping','Lynda.com','2016'],
  ['Design a Mobile App with Adobe XD','Lynda.com','2016'],
 ];
-const QUOTES = [
- ['I had the privilege to manage Ayman on a large revamp of the Insight application at Citi. Under a highly accelerated schedule, he understood the ask and delivered high-quality solutions quickly. He is an amazing team player who makes everyone around him better.','Andrew Heard','Managed Ayman at Citi','AH'],
- ['A brilliant and precise designer, and an inspiring person. Whenever I had a problem, he never left me without a solution. I could always depend on him to set the best example as a designer at American Century Investments.','Cheyenne Toulouse','Worked with Ayman at American Century','CT'],
+const QUOTES = [ // all 11 received LinkedIn recommendations, verbatim, newest first
+ ['Ayman is not only a brilliant and precise Sr. Product Designer but also an inspiring person. Strong, knowledgeable and responsible designer. Thanks to interpersonal skills he has great relations with both company clients and team members. Whenever I had a problem, there has never been a time he has left me without a solution. I could always depend on him to set the best example as designer at American Century Investments. He learns quickly and I would have no doubt in working with Ayman again in the future.','Cheyenne Toulouse','Multi-Disciplinary Designer & Creative Strategist · Worked with Ayman on the same team, 2023','CT'],
+ ['I had the privilege to manage Ayman on a large revamp of the Insight application here at Citi. The quality of Ayman\'s work is capable of speaking for itself. Under a highly accelerated schedule, Ayman was able to understand the ask and deliver high-quality solutions quickly. He has a passion for design and UX and because of that passion is always bringing new ideas to the table. I approached him often to run ideas by him to brainstorm and after every talk, I walked away feeling more confident in our approach. In the face of ambiguity, he was able to conceptualize ideas and run with them. To top it all off, he is an amazing team player that makes everyone around him better. I would work with him again in a heartbeat.','Andrew Heard','Product Business Analyst & Senior UX/UI Designer · Managed Ayman directly, 2021','AH'],
+ ['As UX Manager, I had the pleasure of working with Ayman on our Regulatory & Management Reporting platform at Citi. He is a highly-skilled as a UX designer, capable of picking apart a complex problem and piecing together a simple and effective solution. He is a designer that I trusted to collaborate well with our clients and technology partners, providing new ideas and challenging norms to deliver the best possible solution to our users. He is a rare talent and I would highly recommend him on any team.','Leticia Molina','UX Manager · Managed Ayman directly, 2021','LM'],
+ ['Ayman is a natural when it comes to solving UX problems. His expertise in interaction design and visual design added tremendous value to our team. He is always in the look out for new ideas and inspirations making him an amazing team guy that you can go to for anything and be sure it will be done and done best. He is extremely dependable and always willing to go that extra mile to exceed expectation. I highly rate Ayman as a UX Designer and higher as a person.','Gokul Kalyanaraman','User Experience Designer · Worked with Ayman on the same team, 2021','GK'],
+ ['As a product owner I had the opportunity to work closely with Ayman on the eCommerce Digital Experience project for over 6 months. Ayman is a seasoned and dedicated UX designer. With his experience and "out of the box" thinking we were able to bring effective UX solutions/ designs that exceeded the expectations of the stakeholders. Ayman is personable, knows how to lesson to others on the team, and works collaboratively to create effective team work.','Nissim Ozery','Digital Solutions Product Manager at Edwards Safety · Worked with Ayman on the same team, 2019','NO'],
+ ['Ayman is one of few very professional and outstanding UX Designers that I have worked with. Ayman is focused and accurate in his designs. He is tenacious in following up and getting answers and signoff. I would work with Ayman again in a heartbeat.','Elise De Villiers','Advanced Scrum Master · Managed Ayman directly, 2019','ED'],
+ ['From the day he joined our team, Ayman proved an asset to all that worked with him. Always striving to not only to push himself to be better, he would often challenge others to do the same. That approach is not always easy to execute, but Ayman always did so with professionalism, grace, and respect. Ayman is a team player, treating every project with the same importance, hitting all deadlines, and doing so with a fantastic eye for detail, and forward thinking design. He will be an asset to any company (team) he joins. You’ll love him both personally and professionally.','Eric Loehrmann','MGR UX/UI at Everi Holdings Inc. · Managed Ayman directly, 2018','EL'],
+ ['Ayman is one in a million. He is not afraid of the blank page as he is always exited to figure out design solutions that are not only beautiful but efficient. He always sees every project in a positive light and wants to blow away people with his design sensitivity and strategic thinking. He goes far beyond expectations and creates great interactive experiences. He get my highest recommendation not only as a great designer but as a great human being and team player.','Claudia Canas','Creative Director · Managed Ayman directly, 2018','CC'],
+ ['It has been a privilege working with Ayman, he is an excellent source of inspiration, dedication and passion. He is one of those rare kind of people that you know your always in good hands.','Nader Nakhla','Senior UX Designer · Ayman’s client, 2013','NN'],
+ ['Ayman is very talented graphic designer, he always comes up with new and superior ideas for any project he creates, he produced so many graphic design projects used for a lot of printed products, Magazines, Books, Catalogs, Brochures, and Business Cards. Highly I recommend Ayman for any position related to graphic design.','Magdy Said','Graphic/Web Designer · Ayman was his client, 2013','MS'],
+ ['Ayman was a great addition to our team at A.R. Group. He was both creative and innovative, and continuously produced ideas, designs and concepts that were out of the box. Ayman is also self-motivated, punctual and loves what he does. It was a pleasure working with him.','Ahmed Reda','General Manager at A.R. Group · Senior to Ayman, 2013','AR']
 ];
 
 /* ---------------- Templates ---------------- */
@@ -805,8 +817,8 @@ function vHome(){
   </section>
 
   <section>
-    <div class="sec-head rv"><div><span class="mono">Recommendations</span><h2>What colleagues say</h2></div></div>
-    <div class="quotes">${QUOTES.map(q=>`<blockquote class="rv"><p>“${q[0]}”</p><footer><span class="ava">${q[3]}</span><span>${q[1]}<small>${q[2]}</small></span></footer></blockquote>`).join('')}</div>
+    <div class="sec-head rv"><div><span class="mono">Recommendations</span><h2>What colleagues say</h2></div><span class="mono">${QUOTES.length} recommendations on LinkedIn</span></div>
+    <div class="quotes recs">${QUOTES.map(q=>`<blockquote class="rv"><p>“${q[0]}”</p><footer><span class="ava">${q[3]}</span><span>${q[1]}<small>${q[2]}</small></span></footer></blockquote>`).join('')}</div>
   </section>
   ${band()}${footer()}`;
 }
